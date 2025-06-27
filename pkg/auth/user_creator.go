@@ -33,7 +33,7 @@ func UserCreator(register Register) (string, error) {
 
 	db.Create(&user)
 
-	token, _ := TokenCreator(user)
+	token, _ := TokenEncode(user)
 
 	return token, nil
 }

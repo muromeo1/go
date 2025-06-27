@@ -59,6 +59,22 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"token": token})
 	})
 
+	r.GET("/api/sessions", func(c *gin.Context) {
+		token := c.Request.Header.Get("Authorization")
+		if token == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
+			return
+		}
+
+		claims, err := auth.TokenDecode(token)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"exp": claims["exp"]})
+	})
+
 	if port == "" {
 		r.Run(":8080")
 	} else {

@@ -21,7 +21,7 @@ func SessionCreator(login Login) (string, error) {
 		return "", err
 	}
 
-	token, err := TokenCreator(user)
+	token, err := TokenEncode(user)
 
 	if err != nil {
 		err := errors.New("failed to create token")
