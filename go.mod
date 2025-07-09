@@ -1,4 +1,4 @@
-module go-api
+module github.com/muromeo1/go
 
 go 1.24.2
 

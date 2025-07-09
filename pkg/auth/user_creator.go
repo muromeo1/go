@@ -2,7 +2,7 @@ package auth
 
 import (
 	"errors"
-	"go-api/pkg/config"
+	"github.com/muromeo1/go/pkg/config"
 	"golang.org/x/crypto/bcrypt"
 )
 

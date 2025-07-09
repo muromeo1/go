@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-api/pkg/auth"
-	"go-api/pkg/config"
+	"github.com/muromeo1/go/pkg/auth"
+	"github.com/muromeo1/go/pkg/config"
 
 	"flag"
 	"log"
