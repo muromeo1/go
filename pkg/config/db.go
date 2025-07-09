@@ -4,7 +4,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"os"
 	"sync"
 )
 
@@ -15,7 +14,7 @@ var (
 
 func PG() *gorm.DB {
 	once.Do(func() {
-		dsn := os.Getenv("DATABASE_URL")
+		dsn := Values.DatabaseUrl
 		var err error
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {

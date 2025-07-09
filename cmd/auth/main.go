@@ -2,23 +2,39 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go-api/pkg/auth"
+	"go-api/pkg/config"
+
+	"flag"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Printf("Error loading environment variables: %v", err)
+	databaseUrl := flag.String("database-url", "", "Postgres database url")
+	jwtSecret := flag.String("secret", "", "JWT Secret")
+	ginMode := flag.String("mode", "debug", "Gin mode")
+	port := flag.String("port", "8080", "Port to run the http server")
+
+	flag.Parse()
+
+	if *databaseUrl == "" {
+		log.Fatalf("Database url is missing")
 	}
 
-	if ginMode := os.Getenv("GIN_MODE"); ginMode != "" {
-		gin.SetMode(ginMode)
+	if *jwtSecret == "" {
+		log.Fatalf("Secret is missing")
 	}
 
-	port := os.Getenv("PORT")
+	config.Values = config.Struct{
+		DatabaseUrl: *databaseUrl,
+		JWTSecret:   *jwtSecret,
+		GinMode:     *ginMode,
+		Port:        *port,
+	}
+
+	gin.SetMode(config.Values.GinMode)
+
 	r := gin.Default()
 
 	r.GET("/api/health", func(c *gin.Context) {
@@ -75,9 +91,5 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"exp": claims["exp"]})
 	})
 
-	if port == "" {
-		r.Run(":8080")
-	} else {
-		r.Run(":" + port)
-	}
+	r.Run(":" + config.Values.Port)
 }
