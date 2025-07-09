@@ -37,7 +37,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/api/health", func(c *gin.Context) {
+	r.GET("/api/auth/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
