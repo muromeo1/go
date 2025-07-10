@@ -36,6 +36,8 @@ func main() {
 	gin.SetMode(config.Values.GinMode)
 
 	r := gin.Default()
+	db := config.PG()
+	db.AutoMigrate(&auth.User{})
 
 	r.GET("/api/auth/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
