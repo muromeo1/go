@@ -1,13 +1,12 @@
 package main
 
 import (
+	"flag"
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/muromeo1/go/pkg/auth"
 	"github.com/muromeo1/go/pkg/config"
-
-	"flag"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -39,59 +38,10 @@ func main() {
 	db := config.PG()
 	db.AutoMigrate(&auth.User{})
 
-	r.GET("/api/auth/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
-
-	r.POST("/api/users", func(c *gin.Context) {
-		register := auth.Register{}
-
-		if err := c.ShouldBindJSON(&register); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		token, err := auth.UserCreator(register)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"token": token})
-	})
-
-	r.POST("/api/sessions", func(c *gin.Context) {
-		login := auth.Login{}
-
-		if err := c.ShouldBindJSON(&login); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		token, err := auth.SessionCreator(login)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"token": token})
-	})
-
-	r.GET("/api/sessions", func(c *gin.Context) {
-		token := c.Request.Header.Get("Authorization")
-		if token == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
-			return
-		}
-
-		claims, err := auth.TokenDecode(token)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			return
-		}
-
-		c.JSON(http.StatusOK, gin.H{"exp": claims["exp"]})
-	})
+	r.GET("/api/auth/health", auth.HealthCheckHandler)
+	r.POST("/api/users", auth.UserCreateHandler)
+	r.POST("/api/sessions", auth.SessionCreateHandler)
+	r.GET("/api/sessions", auth.SessionAuthenticateHandler)
 
 	r.Run(":" + config.Values.Port)
 }
