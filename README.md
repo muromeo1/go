@@ -21,5 +21,5 @@ bin/prdescription --open-ai-key="your key" --branch="branch to compare agains ex
 How to build:
 
 ```sh
-go build -o ../../bin/prdescription ./cmd/prdescription/main.go
+go build -o bin/prdescription ./cmd/prdescription/main.go
 ```
