@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os/exec"
 
 	"github.com/muromeo1/go/pkg/prdescription"
 )
@@ -28,19 +27,6 @@ func main() {
 	client := prdescription.NewClient(url, *key, "gpt-4.1-nano")
 	resp := client.Responses(diff)
 
-	copyToClipboard(resp)
+	prdescription.CopyToClipboard(resp)
 	fmt.Println(resp)
-}
-
-func copyToClipboard(text string) {
-	cmd := exec.Command("pbcopy")
-	in, _ := cmd.StdinPipe()
-	defer in.Close()
-
-	cmd.Start()
-	in.Write([]byte(text))
-	in.Close()
-	cmd.Wait()
-
-	fmt.Println("Copied to clipboard")
 }
