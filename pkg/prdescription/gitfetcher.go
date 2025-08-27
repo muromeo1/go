@@ -20,3 +20,10 @@ func (g *GitFetcher) Diff() string {
 
 	return string(output)
 }
+
+func (g *GitFetcher) Log() string {
+	cmd := exec.Command("git", "log", "origin/"+g.Branch+"..HEAD", "-p")
+	output, _ := cmd.Output()
+
+	return string(output)
+}

@@ -13,6 +13,13 @@ This is a small microservice to handle authentications via API, and also, my fir
 A small PR Description creator based on diffs.
 
 Usage:
+
 ```sh
 bin/prdescription --open-ai-key="your key" --branch="branch to compare agains ex.: main"
+```
+
+How to build:
+
+```sh
+go build -o ../../bin/prdescription ./cmd/prdescription/main.go
 ```

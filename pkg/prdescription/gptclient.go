@@ -35,8 +35,8 @@ func NewClient(url, token, model string) *Client {
 	}
 }
 
-func (client *Client) Responses(diff string) string {
-	input := fmt.Sprintf(input(), diff)
+func (client *Client) Responses(gitLog string) string {
+	input := fmt.Sprintf(input(), gitLog)
 
 	payload := map[string]string{
 		"model":        client.Model,
@@ -66,7 +66,7 @@ func (client *Client) Responses(diff string) string {
 
 func instructions() string {
 	return `You are an expert at creating git PR descriptions based on file changes.
-	You will be provided with a git diff and you will create a PR description using the context of the project.
+	You will be provided with a git log and you will create a PR description using the context of the project.
 	You should be succinct using markdown and returning only the description in the following structure:
 	
 	## PR Description

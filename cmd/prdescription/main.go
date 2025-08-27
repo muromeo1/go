@@ -22,10 +22,10 @@ func main() {
 	}
 
 	git := prdescription.NewGitFetcher(*branch)
-	diff := git.Diff()
+	gitLog := git.Log()
 
 	client := prdescription.NewClient(url, *key, "gpt-4.1-nano")
-	resp := client.Responses(diff)
+	resp := client.Responses(gitLog)
 
 	prdescription.CopyToClipboard(resp)
 	fmt.Println(resp)
