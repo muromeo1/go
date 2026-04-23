@@ -14,15 +14,20 @@ const (
 )
 
 func main() {
-	refreshRate := flag.Int("refresh", 5, "Refresh rate in seconds")
-	token := flag.String("token", defaultToken, "GitHub Copilot API token")
+	refreshRate := flag.Int("refresh", 10, "Refresh rate in seconds")
+	copilotToken := flag.String("token", "", "GitHub Copilot API token")
 	flag.Parse()
 
+	var token string
+	if *copilotToken == "" {
+		token = defaultToken
+	}
+
 	tick := time.Tick(time.Second * time.Duration(*refreshRate))
-	printUsage(*token)
+	printUsage(token)
 
 	for range tick {
-		printUsage(*token)
+		printUsage(token)
 	}
 }
 
